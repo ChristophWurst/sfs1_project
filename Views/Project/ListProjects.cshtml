@@ -1,6 +1,12 @@
+@model ProjectManager.Models.ProjectViewModels.ListProjectViewModel
 @{
-    ViewData["Title"] = "Project Manager";
+    ViewData["Title"] = "Your Projects";
 }
 
 <h1>Your Projects</h1>
 
+<ul>
+@foreach (var project in @Model.Projects) {
+    <li>@project.Name</li>
+ }
+</ul>
