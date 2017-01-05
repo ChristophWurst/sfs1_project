@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -46,6 +47,8 @@ namespace ProjectManager
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            services.AddAuthorization(options => options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin")));
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();

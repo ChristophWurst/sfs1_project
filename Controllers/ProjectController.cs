@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManager.Models;
@@ -8,6 +9,7 @@ using ProjectManager.Models.ProjectViewModels;
 
 namespace ProjectManager.Controllers
 {
+    [Authorize]
     public class ProjectController : Controller
     {
         private ProjectManagerContext _context;
@@ -38,6 +40,7 @@ namespace ProjectManager.Controllers
 
         // GET Project/AddProject
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> AddProject()
         {
             return View();
