@@ -7,6 +7,7 @@
         <tr>
             <th>#</th>
             <th>Name</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -14,6 +15,7 @@
         <tr>
             <th scope="row">@project.Id</th>
             <td>@project.Name</td>
+            <td><a asp-action="Deleteproject" asp-route-id="@project.Id">delete</a></td>
         </tr>
         }
     </tbody>
