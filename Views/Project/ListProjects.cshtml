@@ -1,12 +1,20 @@
-@model ProjectManager.Models.ProjectViewModels.ListProjectViewModel
-@{
-    ViewData["Title"] = "Your Projects";
-}
+ @{ ViewData["Title"] = "Your Projects"; } @model ProjectManager.Models.ProjectViewModels.ListProjectViewModel
 
 <h1>Your Projects</h1>
 
-<ul>
-@foreach (var project in @Model.Projects) {
-    <li>@project.Name</li>
- }
-</ul>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in @Model.Projects) {
+        <tr>
+            <th scope="row">@project.Id</th>
+            <td>@project.Name</td>
+        </tr>
+        }
+    </tbody>
+</table>
