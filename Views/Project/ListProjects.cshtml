@@ -2,6 +2,12 @@
 
 <h1>Your Projects</h1>
 
+@if (await AuthorizationService.AuthorizeAsync(User, "AdminOnly")) {
+<p>
+    <a class="btn btn-default" asp-action="AddProject"><span class="glyphicon glyphicon-plus"></span> Add project</a>
+</p>
+}
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -20,9 +26,3 @@
         }
     </tbody>
 </table>
-
-@if (await AuthorizationService.AuthorizeAsync(User, "AdminOnly")) {
-<p>
-    <a asp-action="AddProject">Add project</a>
-</p>
-}
