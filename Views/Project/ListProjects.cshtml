@@ -21,6 +21,8 @@
     </tbody>
 </table>
 
+@if (await AuthorizationService.AuthorizeAsync(User, "AdminOnly")) {
 <p>
     <a asp-action="AddProject">Add project</a>
 </p>
+}
