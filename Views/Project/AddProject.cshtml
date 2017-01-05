@@ -1,0 +1,13 @@
+@model ProjectManager.Models.ProjectViewModels.AddProjectViewModel
+
+
+<div class="row">
+    <div class="col-md-8">
+        <section>
+            <form class="form-inline" asp-controller="Project" asp-action="SaveProject">
+                <input asp-for="Name" type="text" class="form-control" id="Name" placeholder="Project Name">
+                <button type="submit" class="btn btn-default">Add Project</button>
+            </form>
+        </section>
+    </div>
+</div>

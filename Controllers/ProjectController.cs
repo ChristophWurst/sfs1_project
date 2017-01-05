@@ -26,13 +26,35 @@ namespace ProjectManager.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)
             {
-               return RedirectToAction(nameof(AccountController.Login), new { Controller = "Account" });
+                return RedirectToAction(nameof(AccountController.Login), new { Controller = "Account" });
             }
 
             return View(new ListProjectViewModel()
             {
                 Projects = _context.Projects.ToList()
             });
+        }
+
+        // GET Project/AddProject
+        [HttpGet]
+        public async Task<IActionResult> AddProject() 
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryTokenAttribute]
+        public async Task<IActionResult> SaveProject(AddProjectViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Projects.Add(new Project
+                {
+                    Name = model.Name
+                });
+                _context.SaveChanges();
+            }
+            return RedirectToAction(nameof(ListProjects));
         }
     }
 }
