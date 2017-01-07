@@ -47,6 +47,7 @@ namespace ProjectManager.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         [ValidateAntiForgeryTokenAttribute]
         public async Task<IActionResult> SaveProject(AddProjectViewModel model)
         {
@@ -62,6 +63,7 @@ namespace ProjectManager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteProject(string id)
         {
             Project project = _context.Projects.Where(p => p.Id == id).FirstOrDefault();
@@ -76,6 +78,7 @@ namespace ProjectManager.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DestroyProject(string id, bool delete)
         {
             Project project = _context.Projects.Where(p => p.Id == id).FirstOrDefault();
