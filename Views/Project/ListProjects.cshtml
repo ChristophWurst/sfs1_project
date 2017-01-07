@@ -21,7 +21,11 @@
         <tr>
             <th scope="row">@project.Id</th>
             <td>@project.Name</td>
-            <td><a asp-action="Deleteproject" asp-route-id="@project.Id">delete</a></td>
+            <td>
+                @if (await AuthorizationService.AuthorizeAsync(User, "AdminOnly")) {
+                <a asp-action="Deleteproject" asp-route-id="@project.Id">delete</a>
+                }
+            </td>
         </tr>
         }
     </tbody>
