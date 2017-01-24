@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/bin/Debug/netcoreapp1.0/ProjectManager.dll",
+            "program": "${workspaceRoot}/bin/Debug/netcoreapp1.0/sfs1_project.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
