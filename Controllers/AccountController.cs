@@ -172,6 +172,9 @@ namespace ProjectManager.Controllers
             if (result.Succeeded)
             {
                 _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
+                foreach (var x in info.Principal.Claims) {
+                    System.Console.WriteLine(x);
+                }
                 return RedirectToLocal(returnUrl);
             }
             if (result.RequiresTwoFactor)

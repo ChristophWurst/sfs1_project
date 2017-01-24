@@ -49,7 +49,7 @@ namespace ProjectManager
 
             services.AddMvc();
 
-            services.AddAuthorization(options => options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin")));
+            services.AddAuthorization(options => options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Yolo")));
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -77,6 +77,10 @@ namespace ProjectManager
 
             app.UseIdentity();
 
+            app.UseClaimsTransformation(new ClaimsTransformationOptions
+            {
+                Transformer = new ClaimsTransformer()
+            });
             app.UseFacebookAuthentication(new FacebookOptions()
             {
                 AppId = Configuration["Authentication:Facebook:AppId"],
