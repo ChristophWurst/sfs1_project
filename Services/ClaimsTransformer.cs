@@ -11,7 +11,7 @@ public class ClaimsTransformer : IClaimsTransformer
         if (prince.Claims.Any(c =>
         {
             return c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-                     && c.Value.EndsWith("@gmail.com");
+                     && c.Value.EndsWith("@winzerhof-wurst.at");
         }))
         {
             ((ClaimsIdentity)context.Principal.Identity).AddClaim(new Claim("Yolo", "true"));
