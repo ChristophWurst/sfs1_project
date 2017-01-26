@@ -1,5 +1,78 @@
-# SFS1 Projekt: Web-App using Claims Identity Security
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>SFS1 Projekt: Web-App using Claims Identity Security</title>
+		<style>
+			body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+h1, h2, h3 {
+	font-weight: 400;
+	margin-bottom: 0;
+}
+.remark-slide-content h1 { font-size: 3em; }
+.remark-slide-content h2 { font-size: 2em; }
+.remark-slide-content h3 { font-size: 1.6em; }
+.footnote {
+	position: absolute;
+	bottom: 3em;
+}
+li p { line-height: 1.25em; }
+.red { color: #fa0000; }
+.large { font-size: 2em; }
+a, a > code {
+	color: rgb(249, 38, 114);
+	text-decoration: none;
+}
+code {
+	background: none repeat scroll 0 0 #F8F8FF;
+  border: 1px solid #DEDEDE;
+  border-radius: 3px 	;
+  padding: 0 0.2em;
+}
+.remark-code, .remark-inline-code { font-family: "Bitstream Vera Sans Mono", "Courier", monospace; }
+.remark-code-line-highlighted     { background-color: #373832; }
+.pull-left {
+	float: left;
+	width: 47%;
+}
+.pull-right {
+	float: right;
+	width: 47%;
+}
+.pull-right ~ p {
+	clear: both;
+}
+#slideshow .slide .content code {
+	font-size: 0.8em;
+}
+#slideshow .slide .content pre code {
+	font-size: 0.9em;
+	padding: 15px;
+}
+.main-title, .title {
+	background: #272822;
+	color: #777872;
+	text-shadow: 0 0 20px #333;
+}
+.title h1, .title h2, .main-title h1, .main-title h2 {
+	color: #f3f3f3;
+	line-height: 0.8em;
+}
+/* Custom */
+.remark-code {
+	display: block;
+	padding: 0.5em;
+}
 
+		</style>
+	</head>
+	<body>
+		<textarea id="source">
+class: center, middle, main-title
+
+# SFS1 Projekt: Web-App using Claims Identity Security
 *Stefan Rösch, Christoph Wurst*, Masterstudiengang Software Engineering,
 Hagenberg 2017
 
@@ -8,23 +81,24 @@ Dazu wurde eine einfache Web-App erstellt, die die Verwaltung von Projekten
 erlaubt. Dabei werden die CRUD-Operationen durch einen Login und
 Authorisierungsrichtlinien geschützt.
 
+
 ---
 ## Berechtigungen
-
 Folgende Berechtigungen wurden festgelegt:
 
-* Anonymer Zugriff
-    * Projekte auflisten
-* Angemeldeter Benutzer
-    * Projekte auflisten
-* Administratoren
-    * Projekte auflisten
-    * Projekte erstellen
-    * Projekte löschen
+
+- Anonymer Zugriff
+ - Projekte auflisten
+- Angemeldeter Benutzer
+ - Projekte auflisten
+- Administratoren
+ - Projekte auflisten
+ - Projekte erstellen
+ - Projekte löschen
+
 
 ---
 ### Definition der Regel
-
 Eine Regel (*Policy*) für Administratoren erlaubt das Referenzieren der
 Zugriffsrechte an verschiedenen Orten des Codes. Diese Regel wird in der
 [Startup Klasse](../Startup.cs) definiert:
@@ -33,15 +107,14 @@ Zugriffsrechte an verschiedenen Orten des Codes. Diese Regel wird in der
 services.AddAuthorization(options => 
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Yolo")));
 ```
+Das bedeutet, dass nur jene Benutzer, die über den &quot;Yolo&quot;-Claim verfügen,
+auf Resourcen zugreifen dürfen, die mit &quot;AdminOnly&quot; geschützt sind.
 
-Das bedeutet, dass nur jene Benutzer, die über den "Yolo"-Claim verfügen,
-auf Resourcen zugreifen dürfen, die mit "AdminOnly" geschützt sind.
 
 ---
 ### Verwendung im C#-Code
-
 Der [ProjectController](../Controllers/ProjectController.cs) beinhaltet diese
-Funktionalität. Der Controller wurde erhält das [``Authorize``-Attribut](https://msdn.microsoft.com/en-us/library/system.web.mvc.authorizeattribute.aspx), wodurch
+Funktionalität. Der Controller wurde erhält das [`Authorize`-Attribut](https://msdn.microsoft.com/en-us/library/system.web.mvc.authorizeattribute.aspx), wodurch
 die Methoden nur von angemeldeten Benutzern aufgerufen werden können. Die
 besonders markanten Code-Teile sind
 
@@ -63,8 +136,8 @@ besonders markanten Code-Teile sind
 
 ---
 ### Verwendung in Razor-Views
-
 Auch [in den Views](../Views/Project/ListProjects.cshtml) wird auf die Policy zugegriffen, wenn entschieden wird, ob der aktuelle Benutzer gewisse Teile der Seite sehen soll oder nicht:
+
 ```C#
 @if (await AuthorizationService.AuthorizeAsync(User, "AdminOnly")) {
 <p>
@@ -77,15 +150,15 @@ Auch [in den Views](../Views/Project/ListProjects.cshtml) wird auf die Policy zu
 
 ---
 ## Externer Identity Provider
-
 Als externer *Identity Provider* wurde Facebook gewählt. Über diesen soll es
 Benutzern möglich sein, sich anzumelden. Das System entscheidet je nach Claims
 des Facebook IdPs, welche Claims im System gewährt werden.
 
+
 ---
 ### Provider aktivieren
-
 Der Provider wird in [Startup.cs definiert](https://github.com/ChristophWurst/sfs1_project/blob/f809fe6e301972b3f820e0184a0721a4ca967d92/Startup.cs#L84-L88):
+
 ```C#
     app.UseFacebookAuthentication(new FacebookOptions()
     {
@@ -93,13 +166,12 @@ Der Provider wird in [Startup.cs definiert](https://github.com/ChristophWurst/sf
         AppSecret = Configuration["Authentication:Facebook:AppSecret"]
     });
 ```
-
 Der Provider registriert spezielle *Middlewares*, die Requests zur externen Anmeldung
 bearbeiten.
 
+
 ---
 ### Claims Transformation
-
 Um die Berechtigungen des externen IdP auf die des Systems zu übersetzen, werden
 die Claims *on the fly* zur Laufzeit zugewiesen. Dazu wird die Klasse 
 [ClaimsTransformer](..(/Services/ClaimsTransformer.cs)) verwendet. Diese
@@ -129,8 +201,8 @@ public class ClaimsTransformer : IClaimsTransformer
 
 }
 ```
-
 Diese Klasse muss [in Startup.cs definiert werden](https://github.com/ChristophWurst/sfs1_project/blob/f809fe6e301972b3f820e0184a0721a4ca967d92/Startup.cs#L80-L83):
+
 ```C#
     app.UseClaimsTransformation(new ClaimsTransformationOptions
     {
@@ -139,10 +211,23 @@ Diese Klasse muss [in Startup.cs definiert werden](https://github.com/ChristophW
 ```
 
 ---
+class: center, middle, main-title
+
 # Nützliche Links
-* [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/)
-* [ASP.NET Core Identity](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity)
-* [Enabling authentication using Facebook, Google and other external providers
+
+- [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/)
+- [ASP.NET Core Identity](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity)
+- [Enabling authentication using Facebook, Google and other external providers
 ](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/index)
-* [Claims Transformation and Authorization Policy in ASP.NET Core / MVC 6](https://weblogs.asp.net/imranbaloch/claims-transformation-and-authorization-policy-in-aspnet5-mvc6)
-* [Facebook Developer](https://developers.facebook.com/)
+- [Claims Transformation and Authorization Policy in ASP.NET Core / MVC 6](https://weblogs.asp.net/imranbaloch/claims-transformation-and-authorization-policy-in-aspnet5-mvc6)
+- [Facebook Developer](https://developers.facebook.com/)
+
+
+		</textarea>
+		<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+		<script>
+			var slideshow = remark.create();
+		</script>
+		<script></script>
+	</body>
+</html>
