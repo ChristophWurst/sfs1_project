@@ -27,7 +27,7 @@ Eine Regel (*Policy*) für Administratoren erlaubt das Referenzieren der
 Zugriffsrechte an verschiedenen Orten des Codes. Diese Regel wird in der
 [Startup Klasse](../Startup.cs) definiert:
 
-```cs
+```C#
 services.AddAuthorization(options => options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Yolo")));
 ```
 
@@ -41,12 +41,12 @@ Funktionalität. Der Controller wurde erhält das [``Authorize``-Attribut](https
 die Methoden nur von angemeldeten Benutzern aufgerufen werden können. Die
 besonders markanten Code-Teile sind
 * [das Attribut der Klasse](https://github.com/ChristophWurst/sfs1_project/blob/f809fe6e301972b3f820e0184a0721a4ca967d92/Controllers/ProjectController.cs#L12)
-```cs
+```C#
     [Authorize]
     public class ProjectController : Controller
 ```
 * [Attribute der Methoden](https://github.com/ChristophWurst/sfs1_project/blob/f809fe6e301972b3f820e0184a0721a4ca967d92/Controllers/ProjectController.cs#L43)
-```cs
+```C#
     // GET Project/AddProject
     [HttpGet]
     [Authorize(Policy = "AdminOnly")]
@@ -59,7 +59,7 @@ besonders markanten Code-Teile sind
 ### Verwendung in Razor-Views
 
 Auch in den Views wird auf die Policy zugegriffen, wenn entschieden wird, ob der aktuelle Benutzer gewisse Teile der Seite sehen soll oder nicht:
-```cs
+```C#
 @if (await AuthorizationService.AuthorizeAsync(User, "AdminOnly")) {
 <p>
     <a class="btn btn-default" asp-action="AddProject"><span class="glyphicon glyphicon-plus"></span> Add project</a>
@@ -76,7 +76,7 @@ des Facebook IdPs, welche Claims im System gewährt werden.
 ## Provider aktivieren
 
 Der Provider wird in [Startup.cs definiert](https://github.com/ChristophWurst/sfs1_project/blob/f809fe6e301972b3f820e0184a0721a4ca967d92/Startup.cs#L84-L88):
-```cs
+```C#
     app.UseFacebookAuthentication(new FacebookOptions()
     {
         AppId = Configuration["Authentication:Facebook:AppId"],
@@ -98,7 +98,7 @@ die Berechtigungen für Projekte ab.
 Hier wird eine ganz einfache Überprüfung durchgeführt, bei der die Benutzer
 je nach E-Mail-Domain Schreib- und Löschrechte bekommen:
 
-```cs
+```C#
 public class ClaimsTransformer : IClaimsTransformer
 {
     public Task<ClaimsPrincipal> TransformAsync(ClaimsTransformationContext context)
@@ -120,7 +120,7 @@ public class ClaimsTransformer : IClaimsTransformer
 ```
 
 Diese Klasse muss [in Startup.cs definiert werden](https://github.com/ChristophWurst/sfs1_project/blob/f809fe6e301972b3f820e0184a0721a4ca967d92/Startup.cs#L80-L83):
-```cs
+```C#
     app.UseClaimsTransformation(new ClaimsTransformationOptions
     {
         Transformer = new ClaimsTransformer()
