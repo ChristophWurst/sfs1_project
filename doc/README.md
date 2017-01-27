@@ -114,8 +114,7 @@ public class ClaimsTransformer : IClaimsTransformer
 {
     public Task<ClaimsPrincipal> TransformAsync(ClaimsTransformationContext context)
     {
-        var prince = context.Principal;
-        if (prince.Claims.Any(c =>
+        if (context.Principal.Claims.Any(c =>
         {
             return c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
                      && c.Value.EndsWith("@winzerhof-wurst.at");
@@ -123,7 +122,6 @@ public class ClaimsTransformer : IClaimsTransformer
         {
             ((ClaimsIdentity)context.Principal.Identity).AddClaim(new Claim("Yolo", "true"));
         }
-
         return Task.FromResult(context.Principal);
     }
 
@@ -139,7 +137,47 @@ Diese Klasse muss [in Startup.cs definiert werden](https://github.com/ChristophW
 ```
 
 ---
-# Nützliche Links
+## Demonstration
+
+Ist man nicht angemeldet, wird der Link zur Projektübersicht nicht angezeigt.
+<img src="img/Screenshot_01.png" width="650" />
+
+---
+### Anmeldung über Facebook
+Neben dem Login für lokale Benutzer erscheint ein Button für den Facebook-Login.
+<img src="img/Screenshot_02.png" width="650" />
+
+---
+### Umleitung auf Facebook
+Benutzer werden anschließend auf Facebook umgeleitet, um zu bestätigen, dass
+persönliche Information an die Web-App übergeben wird.
+<img src="img/Screenshot_03.png" width="650" />
+
+---
+Hier kann man kontrollieren, welche Daten übermittelt werden.
+<img src="img/Screenshot_04.png" width="650" />
+
+---
+### Umleitung zur Web-App
+Sobald Benutzer die App erlauben, leitet Facebook sie zurück zur Web-App. Dort
+müssen sie noch ihre E-Mail-Adresse bestätigen. Anschließend wird ein Benutzer-
+account in der Datenbank angelegt.
+<img src="img/Screenshot_05.png" width="650" />
+
+---
+### Angemeldeter Zustand
+Da die Benutzer nun angemeldet sind, sehen sie den Link zur Projektübersicht.
+<img src="img/Screenshot_06.png" width="650" />
+
+---
+### Projektverwaltung
+Durch die verwendete E-Mail-Adresse auf Facebook wird erkannt, dass es sich um
+einen Administrator handelt. Dieser darf Projekte hinzufügen, deshalb wird ein
+entsprechender Button angezeigt.
+<img src="img/Screenshot_07.png" width="650" />
+
+---
+## Nützliche Links
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/)
 * [ASP.NET Core Identity](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity)
 * [Enabling authentication using Facebook, Google and other external providers
