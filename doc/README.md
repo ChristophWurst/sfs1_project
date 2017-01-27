@@ -41,7 +41,7 @@ auf Resourcen zugreifen dürfen, die mit "AdminOnly" geschützt sind.
 ### Verwendung im C#-Code
 
 Der [ProjectController](../Controllers/ProjectController.cs) beinhaltet diese
-Funktionalität. Der Controller wurde erhält das [``Authorize``-Attribut](https://msdn.microsoft.com/en-us/library/system.web.mvc.authorizeattribute.aspx), wodurch
+Funktionalität. Der Controller erhält das [``Authorize``-Attribut](https://msdn.microsoft.com/en-us/library/system.web.mvc.authorizeattribute.aspx), wodurch
 die Methoden nur von angemeldeten Benutzern aufgerufen werden können. Die
 besonders markanten Code-Teile sind
 
@@ -106,6 +106,7 @@ die Claims *on the fly* zur Laufzeit zugewiesen. Dazu wird die Klasse
 überprüft die Claims, die von Facebook geliefert werden, und leitet daraus
 die Berechtigungen für Projekte ab.
 
+---
 Hier wird eine ganz einfache Überprüfung durchgeführt, bei der die Benutzer
 je nach E-Mail-Domain Schreib- und Löschrechte bekommen:
 
